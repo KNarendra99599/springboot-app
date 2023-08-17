@@ -14,6 +14,12 @@ steps:
   inputs:
     SonarQube: 'My_SonarQube'
     scannerMode: 'Other'
+    extraProperties: |
+      # Additional properties that will be passed to the scanner,
+      # Put one key=value per line, example:
+      # sonar.exclusions=**/*.bin
+      sonar.projectKey=EKS_springboot-app.git_AYoCHKK8wuKuCZ8mWyIH
+      sonar.projectName=springboot-app.git
 
 - task: JavaToolInstaller@0
   inputs:
@@ -24,14 +30,16 @@ steps:
 - task: Maven@4
   inputs:
     mavenPomFile: 'pom.xml'
-    goals: 'clean install sonar:sonar'
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     javaHomeOption: 'JDKVersion'
     mavenVersionOption: 'Default'
     mavenAuthenticateFeed: false
     effectivePomSkip: false
-    sonarQubeRunAnalysis: false
+    sonarQubeRunAnalysis: true
+    sqMavenPluginVersionChoice: 'latest'
+
+
 
 
 

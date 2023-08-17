@@ -43,21 +43,19 @@
  
     <build>
         <plugins>
+            <!-- Spring Boot Maven plugin -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-        </plugins>
-	<finalName>springbootApp</finalName>
-    </build>
-    <build>
-        <plugins>
+
+            <!-- Sonar Scanner Maven plugin -->
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>3.9.1.2184</version>
             </plugin>
         </plugins>
+	<finalName>springbootApp</finalName>
     </build>
- 
 </project>

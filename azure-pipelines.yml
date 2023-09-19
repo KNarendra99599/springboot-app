@@ -19,7 +19,7 @@ steps:
 - task: Docker@2
   inputs:
     repository: '$(imageName)'
-    command: 'buildAndPush'
+    command: 'build'
     Dockerfile: '**/Dockerfile'
     tags: '$(Build.BuildId)'
 

@@ -7,37 +7,43 @@ trigger:
 - main
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: Myagent
 
 steps:
-- task: SonarQubePrepare@5
-  inputs:
-    SonarQube: 'My_SonarQube'
-    scannerMode: 'Other'
-    extraProperties: |
-      # Additional properties that will be passed to the scanner,
-      # Put one key=value per line, example:
-      # sonar.exclusions=**/*.bin
-      sonar.projectKey=EKS_springboot-app.git_AYoCHKK8wuKuCZ8mWyIH
-      sonar.projectName=springboot-app.git
-
-- task: JavaToolInstaller@0
-  inputs:
-    versionSpec: '11'
-    jdkArchitectureOption: 'x64'
-    jdkSourceOption: 'PreInstalled'
-
 - task: Maven@4
   inputs:
     mavenPomFile: 'pom.xml'
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    javaHomeOption: 'JDKVersion'
-    mavenVersionOption: 'Default'
-    mavenAuthenticateFeed: false
-    effectivePomSkip: false
-    sonarQubeRunAnalysis: true
-    sqMavenPluginVersionChoice: 'latest'
+    goals: 'package'
+
+- task: Docker@2
+  inputs:
+    repository: '$(imageName)'
+    command: 'build'
+    Dockerfile: '**/Dockerfile'
+    tags: '$(Build.BuildId)'
+
+- task: ECRPushImage@1
+  inputs:
+    awsCredentials: 'Azure_ECR_CI'
+    regionName: 'us-east-1'
+    imageSource: 'imageid'
+    sourceImageId: '$(imageName):$(Build.BuildId)'
+    repositoryName: '$(repoName)'
+    pushTag: '$(Build.BuildId)'
+    forceDockerNamingConventions: true
+
+
+
+
+
+
+
+
+
+
+
 
 
 
